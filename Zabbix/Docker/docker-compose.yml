@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+
+  zabbix-postgres:
+    image: postgres:latest
+    container_name: zabbix-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+    networks:
+      - zabbix
+    ports:
+      - "5432:5432"
+    volumes:
+      - /etc/zabbix/postgresql:/var/lib/postgresql/data:rw
+
+  zabbix-snmptraps:
+    image: zabbix/zabbix-snmptraps
+    container_name: zabbix-snmptraps
+    restart: unless-stopped
+    volumes:
+      - /etc/zabbix/snmptraps:/var/lib/zabbix/snmptraps:rw
+      - /etc/zabbix/snmp/mibs:/usr/share/snmp/mibs:ro
+    networks:
+      - zabbix
+    ports:
+      - 1162:1162
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql
+    container_name: zabbix-server
+    restart: unless-stopped
+    environment:
+      DB_SERVER_HOST: zabbix-postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+      ZBX_ENABLE_SNMP_TRAPS: true
+    volumes_from:
+      - zabbix-snmptraps
+    networks:
+      - zabbix
+    ports:
+      - 10051:10051
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql
+    container_name: zabbix-web
+    restart: unless-stopped
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      DB_SERVER_HOST: postgres-server
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+    networks:
+      - zabbix
+    ports:
+      - 443:8443
+      - 80:8080
+
+networks:
+  zabbix:
+    name: zabbix
+    driver: bridge
