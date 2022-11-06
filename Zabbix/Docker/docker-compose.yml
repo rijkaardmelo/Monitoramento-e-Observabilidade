@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
     environment:
       ZBX_SERVER_HOST: zabbix-server
-      DB_SERVER_HOST: postgres-server
+      DB_SERVER_HOST: zabbix-postgres
       POSTGRES_USER: zabbix
       POSTGRES_PASSWORD: zabbix_pwd
       POSTGRES_DB: zabbix
