@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-postgres-deployment
+  namespace: zabbix-dev
+  labels:
+    app: zabbix-postgres
+spec: 
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: zabbix-postgres
+  template:
+    metadata:
+      labels:
+        app: zabbix-postgres
+    spec:
+      containers:
+        - name: zabbix-postgres-pod
+          image: postgres
+          imagePullPolicy: Always
+          ports:
+            - name: postgres
+              containerPort: 5432
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "125m"

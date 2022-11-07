@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zabbix-ingress
+  namespace: zabbix-dev
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: zabbix-web-service
+                port:
+                  number: 80
+          - path: /server
+            pathType: Prefix
+            backend:
+              service:
+                name: zabbix-server-service
+                port:
+                  number: 80
+          - path: /database
+            pathType: Prefix
+            backend:
+              service:
+                name: zabbix-postgres-service
+                port:
+                  number: 80
+          - path: /snmp
+            pathType: Prefix
+            backend:
+              service:
+                name: zabbix-snmp-service
+                port:
+                  number: 80

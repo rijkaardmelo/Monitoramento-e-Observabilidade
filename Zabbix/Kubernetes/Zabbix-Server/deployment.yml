@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-server-deployment
+  namespace: zabbix-dev
+  labels:
+    app: zabbix-server
+spec: 
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: zabbix-server
+  template:
+    metadata:
+      labels:
+        app: zabbix-server
+    spec:
+      containers:
+        - name: zabbix-server-pod
+          image: zabbix/zabbix-server-pgsql
+          imagePullPolicy: Always
+          ports:
+            - name: server
+              containerPort: 10051
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "125m"
+

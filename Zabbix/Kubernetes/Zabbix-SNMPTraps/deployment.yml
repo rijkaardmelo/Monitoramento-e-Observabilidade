@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-snmp-deployment
+  namespace: zabbix-dev
+  labels:
+    app: zabbix-snmp
+spec: 
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: zabbix-snmp
+  template:
+    metadata:
+      labels:
+        app: zabbix-snmp
+    spec:
+      containers:
+        - name: zabbix-snmp-pod
+          image: zabbix/zabbix-snmptraps
+          imagePullPolicy: Always
+          ports:
+            - name: snmp
+              containerPort: 1162
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "125m"
