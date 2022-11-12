@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zabbix-web-configmap
+  namespace: zabbix-dev
+data:
+  ZBX_SERVER_HOST: zabbix-server
+  DB_SERVER_HOST: zabbix-postgres

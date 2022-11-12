@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zabbix-server-configmap
+  namespace: zabbix-dev
+data:
+  DB_SERVER_HOST: zabbix-postgres
+  ZBX_ENABLE_SNMP_TRAPS: true

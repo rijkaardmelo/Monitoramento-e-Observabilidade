@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zabbix-postgres-configmap
+  namespace: zabbix-dev
+data:
+  POSTGRES_USER: zabbix
+  POSTGRES_PASSWORD: zabbix_pwd
+  POSTGRES_DB: zabbix
