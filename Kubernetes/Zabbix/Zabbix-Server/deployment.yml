@@ -1,34 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: zabbix-postgres-deployment
-  namespace: zabbix-dev
+  name: zabbix-server-deployment
+  namespace: monitoramento-dev
   labels:
-    app: zabbix-postgres
+    app: zabbix-server
 spec:
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: zabbix-postgres
+      app: zabbix-server
   template:
     metadata:
       labels:
-        app: zabbix-postgres
+        app: zabbix-server
     spec:
       containers:
-        - name: zabbix-postgres-pod
-          image: postgres
+        - name: zabbix-server-pod
+          image: zabbix/zabbix-server-pgsql
           imagePullPolicy: Always
-          volumeMounts:
-            - name: zabbix-postgres-storage
-              mountPath: "/var/lib/postgresql/data "
           envFrom:
             - configMapRef:
-                name: zabbix-postgres-configmap
+                name: zabbix-server-configmap
           ports:
-            - name: postgres
-              containerPort: 5432
+            - name: server
+              containerPort: 10051
+            - name: agent
+              containerPort: 10050
           resources:
             requests:
               memory: "250Mi"
@@ -37,6 +36,6 @@ spec:
               memory: "500Mi"
               cpu: "125m"
       volumes:
-        - name: zabbix-postgres-storage
+        - name: zabbix-server-storage
           persistentVolumeClaim:
             claimName: zabbix-dev-volumeclaim

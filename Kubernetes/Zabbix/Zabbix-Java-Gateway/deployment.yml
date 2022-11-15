@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zabbix-gateway-deployment
-  namespace: zabbix-dev
+  namespace: monitoramento-dev
   labels:
     app: zabbix-gateway
 spec:

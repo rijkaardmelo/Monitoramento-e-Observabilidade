@@ -1,0 +1,98 @@
+version: '3.9'
+
+services:
+
+  zabbix-postgres:
+    image: postgres
+    container_name: zabbix-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    networks:
+      - monitoramento
+    ports:
+      - "5432:5432"
+    volumes:
+      - /etc/zabbix/postgresql:/var/lib/postgresql/data:rw
+
+  zabbix-gateway:
+    image: zabbix/zabbix-java-gateway
+    container_name: zabbix-gateway
+    restart: unless-stopped
+    networks:
+      - monitoramento
+    ports:
+      - 10052:10052
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql
+    container_name: zabbix-server
+    restart: unless-stopped
+    environment:
+      DB_SERVER_HOST: "zabbix-postgres"
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix_pwd"
+      POSTGRES_DB: "zabbix"
+      ZBX_JAVAGATEWAY: "zabbix-gateway"
+    volumes_from:
+      - zabbix-postgres
+    networks:
+      - monitoramento
+    ports:
+      - 10051:10051
+      - 10050:10050
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql
+    container_name: zabbix-web
+    restart: unless-stopped
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      DB_SERVER_HOST: zabbix-postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+    networks:
+      - monitoramento
+    ports:
+      - 443:8443
+      - 80:8080
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    user: root
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /etc/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - monitoramento
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    user: root
+    restart: unless-stopped
+    volumes:
+      - /etc/grafana:/var/lib/grafana
+    networks:
+      - monitoramento
+    ports:
+      - 3000:3000
+
+networks:
+  monitoramento:
+    name: monitoramento
+    driver: bridge

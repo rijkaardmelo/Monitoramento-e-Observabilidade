@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zabbix-web-service
-  namespace: zabbix-dev
+  namespace: monitoramento-dev
 spec:
   type: NodePort
   ports:

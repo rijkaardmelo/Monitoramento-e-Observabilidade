@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zabbix-server-service
-  namespace: zabbix-dev
+  namespace: monitoramento-dev
 spec:
   ports:
     - name: server
