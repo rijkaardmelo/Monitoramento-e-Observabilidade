@@ -20,6 +20,12 @@ spec:
         - name: zabbix-postgres-pod
           image: postgres
           imagePullPolicy: Always
+          volumeMounts:
+            - name: zabbix-postgres-storage
+              mountPath: "/var/lib/postgresql/data "
+          envFrom:
+            - configMapRef:
+                name: zabbix-postgres-configmap
           ports:
             - name: postgres
               containerPort: 5432

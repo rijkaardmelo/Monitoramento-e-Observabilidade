@@ -4,5 +4,5 @@ metadata:
   name: zabbix-web-configmap
   namespace: zabbix-dev
 data:
-  ZBX_SERVER_HOST: zabbix-server
-  DB_SERVER_HOST: zabbix-postgres
+  ZBX_SERVER_HOST: zabbix-server-service
+  DB_SERVER_HOST: zabbix-postgres-service

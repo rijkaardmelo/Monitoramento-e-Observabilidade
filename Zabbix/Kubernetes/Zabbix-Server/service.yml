@@ -5,9 +5,11 @@ metadata:
   namespace: zabbix-dev
 spec:
   ports:
-    - name: web
+    - name: server
       protocol: TCP
-      port: 80
-      targetPort: 10051
+      port: 10051
+    - name: agent
+      protocol: TCP
+      port: 10050
   selector:
     app: zabbix-server

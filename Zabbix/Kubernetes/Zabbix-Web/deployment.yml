@@ -20,6 +20,11 @@ spec:
         - name: zabbix-web-pod
           image: zabbix/zabbix-web-nginx-pgsql
           imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: zabbix-postgres-configmap
+            - configMapRef:
+                name: zabbix-web-configmap
           ports:
             - name: http
               containerPort: 8080
@@ -27,8 +32,8 @@ spec:
               containerPort: 8443
           resources:
             requests:
-              memory: "250Mi"
-              cpu: "100m"
+              memory: "512Mi"
+              cpu: "500m"
             limits:
-              memory: "500Mi"
-              cpu: "125m"
+              memory: "1024Mi"
+              cpu: "1000m"

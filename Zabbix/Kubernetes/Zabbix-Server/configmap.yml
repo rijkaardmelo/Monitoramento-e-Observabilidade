@@ -4,5 +4,8 @@ metadata:
   name: zabbix-server-configmap
   namespace: zabbix-dev
 data:
-  DB_SERVER_HOST: zabbix-postgres
-  ZBX_ENABLE_SNMP_TRAPS: true
+  DB_SERVER_HOST: "zabbix-postgres-service"
+  POSTGRES_USER: "zabbix"
+  POSTGRES_PASSWORD: "zabbix_pwd" 
+  POSTGRES_DB: "zabbix"
+  ZBX_JAVAGATEWAY: "zabbix-gateway-service"

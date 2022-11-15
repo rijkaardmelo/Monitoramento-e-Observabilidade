@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: zabbix-snmp-deployment
+  name: zabbix-gateway-deployment
   namespace: zabbix-dev
   labels:
-    app: zabbix-snmp
+    app: zabbix-gateway
 spec:
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: zabbix-snmp
+      app: zabbix-gateway
   template:
     metadata:
       labels:
-        app: zabbix-snmp
+        app: zabbix-gateway
     spec:
       containers:
-        - name: zabbix-snmp-pod
-          image: zabbix/zabbix-snmptraps
+        - name: zabbix-gateway-pod
+          image: zabbix/zabbix-java-gateway
           imagePullPolicy: Always
           ports:
-            - name: snmp
-              containerPort: 1162
+            - name: gateway
+              containerPort: 10052
           resources:
             requests:
               memory: "250Mi"
@@ -30,7 +30,3 @@ spec:
             limits:
               memory: "500Mi"
               cpu: "125m"
-      volumes:
-        - name: zabbix-snmp-storage
-          persistentVolumeClaim:
-            claimName: zabbix-dev-volumeclaim

@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: zabbix-snmp-service
+  name: zabbix-gateway-service
   namespace: zabbix-dev
 spec:
   ports:
-    - name: web
+    - name: gateway
       protocol: TCP
-      port: 80
-      targetPort: 1162
+      port: 10052
   selector:
-    app: zabbix-snmp
+    app: zabbix-gateway

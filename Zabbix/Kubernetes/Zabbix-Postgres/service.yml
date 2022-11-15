@@ -5,9 +5,8 @@ metadata:
   namespace: zabbix-dev
 spec:
   ports:
-    - name: web
+    - name: postgres
       protocol: TCP
-      port: 80
-      targetPort: 5432
+      port: 5432
   selector:
     app: zabbix-postgres
